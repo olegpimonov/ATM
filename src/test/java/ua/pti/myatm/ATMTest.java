@@ -15,27 +15,27 @@ import static org.mockito.Mockito.*;
  * @author andrii
  */
 public class ATMTest {
- //
+ // проверка не правильного аргумента
     @Test(expected = IllegalArgumentException.class)
     public void testNegativeCashATM()
     {
         ATM atm = new ATM(-1);
     }
-
+// проверка указаной суммы в банкомате
     @Test
     public void testGetATMCash()
     {
         ATM atm = new ATM(1000.0);
         Assert.assertEquals(atm.getCashInATM(), 1000.0);
     }
-
+// проверка карты
     @Test(expected = NullPointerException.class)
     public void testPlasticCardValidationNullPointerException()
     {
         ATM atm = new ATM(1000);
         atm.validatePlasticCard(null, 1234);
     }
-
+// проверка блокировки карты
     @Test
     public void testPlasticCardValidationBlockedPlasticCard()
     {
@@ -45,7 +45,7 @@ public class ATMTest {
         boolean result = atm.validatePlasticCard(plasticCard, 1234);
         Assert.assertFalse(result);
     }
-
+//проверка пароля и блокировки карты
     @Test
     public void testPlasticCardAcceptation()
     {
@@ -58,14 +58,14 @@ public class ATMTest {
         boolean result = atm.validatePlasticCard(plasticCard, pin);
         Assert.assertTrue(result);
     }
-
+//проверка баланса без карты
     @Test(expected = NoPlasticCardException.class)
     public void testCheckBalanceNoCard() throws NoPlasticCardException
     {
         ATM atm = new ATM(1000);
         atm.checkBalanceInThePlasticCard();
     }
-
+//проверка баланса
     @Test
     public void testCheckBalanceInThePlasticCard() throws NoPlasticCardException
     {
@@ -85,18 +85,18 @@ public class ATMTest {
 
         Assert.assertEquals(atm.checkBalanceInThePlasticCard(), 1000.0);
     }
-
+//попытка снять деньги без карты
     @Test(expected = NoPlasticCardException.class)
     public void testGetCashNoPlasticCard() throws NotEnoughCashInAccountException, NoPlasticCardException, NotEnoughCashInATMException
     {
         ATM atm = new ATM(1000);
         Assert.assertNull(atm.getCash(1000));
     }
-
+//
     @Test(expected = NotEnoughCashInAccountException.class)
     public void testGetCashNoEnoughMoney() throws NotEnoughCashInAccountException, NoPlasticCardException, NotEnoughCashInATMException
     {
-        double amount = 1001;
+        double amount = 1500;
         ATM atm = new ATM(100);
         double actual = 1000;
         int pin = 1234;
