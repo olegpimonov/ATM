@@ -3,11 +3,12 @@ package ua.pti.myatm;
 public class ATM {
     private double cash;
     private Card plasticCard;
+    private double amount;
 
     //Можно задавать количество денег в банкомате 
     ATM(double cashInATM)
     {
-        if (cashInATM < 0)
+        if (cashInATM <= 0)
         {
             throw new IllegalArgumentException();
         }
@@ -42,8 +43,7 @@ public class ATM {
     }
 
     //Возвращает сколько денег есть на счету
-    public double checkBalanceInThePlasticCard() throws NoPlasticCardException
-    {
+    public double checkBalanceInThePlasticCard() throws NoPlasticCardException, BlockedCardExeption {
         isInserted();
         return plasticCard.getAccount().getBalanceInTheCard();
     }
@@ -54,8 +54,7 @@ public class ATM {
     //Если недостаточно денег на счете, то должно генерироваться исключение NotEnoughMoneyInAccount 
     //Если недостаточно денег в банкомате, то должно генерироваться исключение NotEnoughMoneyInATM 
     //При успешном снятии денег, указанная сумма должна списываться со счета, и в банкомате должно уменьшаться количество денег
-    public double getCash(double amount) throws NoPlasticCardException, NotEnoughCashInAccountException, NotEnoughCashInATMException
-    {
+    public double getCash(double amount) throws NoPlasticCardException, NotEnoughCashInAccountException, NotEnoughCashInATMException, BlockedCardExeption {
         isInserted();
         Account account = this.plasticCard.getAccount();
         if (account.getBalanceInTheCard() < amount)
@@ -72,11 +71,25 @@ public class ATM {
             }
     }
 
-    public void isInserted() throws NoPlasticCardException
-    {
+    public void isInserted() throws NoPlasticCardException, BlockedCardExeption {
         if (this.plasticCard == null)
         {
             throw new NoPlasticCardException();
+            }
+    }
+
+    public void setPlasticCard(Card plasticCard) {
+        this.plasticCard = plasticCard;
+    }
+
+    public double addCash(double amount) throws BlockedCardExeption, NoPlasticCardException {
+        if (amount <= 0)
+        {
+            throw new IllegalArgumentException();
         }
+        isInserted();
+        Account account = this.plasticCard.getAccount();
+        this.cash += account.add(amount);
+        return account.getBalanceInTheCard();
     }
 }

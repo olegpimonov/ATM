@@ -2,7 +2,7 @@ package ua.pti.myatm;
 
 public class MyATM {
 
-    public static void main(String[] args) throws NoPlasticCardException, NotEnoughCashInAccountException, NotEnoughCashInATMException {
+    public static void main(String[] args) throws NoPlasticCardException, NotEnoughCashInAccountException, NotEnoughCashInATMException, BlockedCardExeption {
         double moneyInATM = 1000;
         ATM atm = new ATM(moneyInATM);
         Card card = null;
